@@ -1,0 +1,40 @@
+app:
+  name: "ginweb"
+  mode: "dev"
+  port: 8085
+
+log:
+  director: "log"
+  level: "info"
+  filename: "gin_web.log"
+  format: console
+  prefix: "ginweb"
+  link-name: "latest_log"
+  show-line: true
+  encode-level: "LowercaseColorLevelEncoder"
+  stacktrace-key: "stacktrace"
+  log-in-console: true
+  max_size: 200 #日志最大为200M
+  max_age: 30  #日志最多保存30天
+  max_backups: 7 #日志备份数量
+
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "root"
+  dbname: "other"
+  max_open_conns: 200
+  max_idle_conns: 10
+
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+  pool_size: 100
+  db: 0
+
+snowflake:
+  start_time: "2021-09-01"
+  machine_id: 1
+

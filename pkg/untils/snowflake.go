@@ -1,4 +1,4 @@
-package snowflake
+package untils
 
 import (
 	"GinAndSqlx/global"

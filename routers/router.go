@@ -25,6 +25,7 @@ func InitRouter() *gin.Engine {
 		userEngine.POST("", controllers.InsertUser)
 		userEngine.PUT("", controllers.UpdateUser)
 		userEngine.DELETE(":id", controllers.DelUser)
+		userEngine.GET("login", controllers.Login)
 	}
 
 	router.NoRoute(func(c *gin.Context) {

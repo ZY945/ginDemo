@@ -20,6 +20,10 @@ func main() {
 	}
 	defer global.MysqlClose()
 
+	if err := global.GormInit(); err != nil {
+		fmt.Printf("init gorm failed, err:%v\n", err)
+		return
+	}
 	//2.初始化redis
 	if err := global.RedisInit(); err != nil {
 

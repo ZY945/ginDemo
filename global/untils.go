@@ -1,9 +1,13 @@
 package global
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	sf "github.com/bwmarrin/snowflake"
 	"time"
 )
+
+const secret = "dasfjreiwn!@#$dasrfjew"
 
 var (
 	Node *sf.Node
@@ -23,4 +27,11 @@ func SnowFlakeInit() (err error) {
 	//userId := GenID()
 	//fmt.Printf("userid:%v\n", userId)
 	return
+}
+
+// MD5encrypt MD5加密
+func MD5encrypt(oPassword string) string {
+	h := md5.New()
+	h.Write([]byte(secret))
+	return hex.EncodeToString(h.Sum([]byte(oPassword)))
 }

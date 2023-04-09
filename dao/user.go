@@ -3,7 +3,7 @@ package dao
 import (
 	"GinAndSqlx/global"
 	"GinAndSqlx/models"
-	_ "GinAndSqlx/models"
+	"GinAndSqlx/models/gorm"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"time"
@@ -13,12 +13,13 @@ func getVosByUser(users []*models.User) (userVos []*models.UserVo) {
 	for i := range users {
 		userVo := &models.UserVo{
 			Id:         users[i].Id,
+			UserName:   users[i].UserName.String,
 			Name:       users[i].Name.String,
 			Age:        users[i].Age.Int64,
 			Sex:        users[i].Sex.String,
 			Address:    users[i].Address.String,
 			Phone:      users[i].Phone.String,
-			CreateTime: users[i].CreateTime.String,
+			CreateTime: users[i].CreateTime.Time.Format("2006-01-02 15:04:05"),
 		}
 		userVos = append(userVos, userVo)
 	}
@@ -28,17 +29,17 @@ func getVosByUser(users []*models.User) (userVos []*models.UserVo) {
 func getVoByUser(user *models.User) (userVo *models.UserVo) {
 	return &models.UserVo{
 		Id:         user.Id,
+		UserName:   user.UserName.String,
 		Name:       user.Name.String,
 		Age:        user.Age.Int64,
 		Sex:        user.Sex.String,
 		Address:    user.Address.String,
 		Phone:      user.Phone.String,
-		CreateTime: user.CreateTime.String,
+		CreateTime: user.CreateTime.Time.Format("2006-01-02 15:04:05"),
 	}
 }
 
-// 查询一行数据
-func SqlxqueryByGet(id int) (vo *models.UserVo) {
+func SqlxQueryByGet(id int) (vo *models.UserVo) {
 	//Get方法
 
 	sqlStr := "SELECT * FROM user WHERE id = ?"
@@ -99,10 +100,10 @@ func Del(id int) (err error) {
 // Insert 新增--Exec
 func Insert(bo *models.AddUserBo) (insertId int64, err error) {
 
-	sqlStr := "insert user(name, age, sex, address, phone, create_time) VALUE (?,?,?,?,?,?)"
+	sqlStr := "insert user(username,password,name, age, sex, address, phone, create_time) VALUE (?,?,?,?,?,?,?,?)"
 
 	//QueryRowx方法可以查询,需要注意scan后的参数应与查询返回的数量一致,且一一对应
-	result, err := global.DB.Exec(sqlStr, bo.Name, bo.Age, bo.Sex, bo.Address, bo.Phone, time.Now().Format("2006-01-02 15:04:05"))
+	result, err := global.DB.Exec(sqlStr, bo.UserName, bo.PassWord, bo.Name, bo.Age, bo.Sex, bo.Address, bo.Phone, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
 		fmt.Printf("insert failed, err:%v\n", err)
 		return
@@ -137,4 +138,22 @@ func Update(bo *models.UpdateUserBo) {
 		return
 	}
 	fmt.Printf("update success, affected rows:%d\n", n)
+}
+
+// Login (gorm)
+func Login(bo *models.LoginUserBo) {
+	var total int64
+	var user *gorm.User
+	err := global.GormDB.Model(&user).
+		Where("username=? and password=?", bo.UserName, bo.PassWord).
+		Count(&total).Error
+	if err != nil {
+		fmt.Printf("get RowsAffected failed, err:%v\n", err)
+		return
+	}
+	if total == 0 {
+		fmt.Printf("No found the user")
+		return
+	}
+	return
 }

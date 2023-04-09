@@ -31,7 +31,7 @@ func NewSetting() (*Setting, error) {
 	return s, nil
 }
 
-// 读取指定的一段
+// ReadSection 读取指定的一段
 func (s *Setting) ReadSection(k string, v interface{}) error {
 	err := s.vp.UnmarshalKey(k, v)
 	if err != nil {

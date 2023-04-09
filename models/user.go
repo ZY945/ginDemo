@@ -4,28 +4,21 @@ import (
 	"database/sql"
 )
 
-//type User struct {
-//	Id         int    `db:"id"`
-//	Name       string `db:"name"`
-//	Age        int    `db:"age"`
-//	Sex        string `db:"sex"`
-//	Address    string `db:"address"`
-//	Phone      string `db:"phone"`
-//	CreateTime string `db:"create_time"`
-//}
-
 type User struct {
 	Id         int            `db:"id"`
-	Name       sql.NullString `db:"name"`
-	Age        sql.NullInt64  `db:"age"`
-	Sex        sql.NullString `db:"sex"`
-	Address    sql.NullString `db:"address"`
-	Phone      sql.NullString `db:"phone"`
-	CreateTime sql.NullString `db:"create_time"`
+	UserName   sql.NullString `db:"username" json:"username"`
+	PassWord   sql.NullString `db:"password" json:"password"`
+	Name       sql.NullString `db:"name" json:"name"`
+	Age        sql.NullInt64  `db:"age" json:"age"`
+	Sex        sql.NullString `db:"sex" json:"sex"`
+	Address    sql.NullString `db:"address" json:"address"`
+	Phone      sql.NullString `db:"phone" json:"phone"`
+	CreateTime sql.NullTime   `db:"create_time" json:"createTime"`
 }
 
 type UserVo struct {
 	Id         int
+	UserName   string
 	Name       string
 	Age        int64
 	Sex        string
@@ -33,13 +26,19 @@ type UserVo struct {
 	Phone      string
 	CreateTime string
 }
+type LoginUserBo struct {
+	UserName string
+	PassWord string
+}
 
 type AddUserBo struct {
-	Name    string
-	Age     int64
-	Sex     string
-	Address string
-	Phone   string
+	UserName string
+	PassWord string
+	Name     string
+	Age      int64
+	Sex      string
+	Address  string
+	Phone    string
 	//CreateTime time.Time `default:"3"` //为0时
 }
 

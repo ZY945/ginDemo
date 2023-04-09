@@ -35,5 +35,9 @@ func main() {
 	}
 	router := routers.InitRouter()
 
-	router.Run(":8080")
+	err := router.Run(":8080")
+	if err != nil {
+		fmt.Printf("service run fail!")
+		return
+	}
 }

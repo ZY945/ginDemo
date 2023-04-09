@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"GinAndSqlx/dao/mysql"
+	"GinAndSqlx/dao"
 	"GinAndSqlx/models"
 	"encoding/json"
 	"fmt"
@@ -14,12 +14,12 @@ import (
 func GetUserVoById(context *gin.Context) {
 	idStr := context.Query("id")
 	id, _ := strconv.Atoi(idStr)
-	vo := mysql.SqlxqueryByGet(id)
+	vo := dao.SqlxqueryByGet(id)
 	context.JSON(http.StatusOK, vo)
 }
 
 func List(context *gin.Context) {
-	_, vos, _ := mysql.SqlxList()
+	_, vos, _ := dao.SqlxList()
 	fmt.Println(vos)
 	context.JSON(http.StatusOK, vos)
 }
@@ -33,7 +33,7 @@ func InsertUser(context *gin.Context) {
 		log.Print("json error:\n", err)
 		return
 	}
-	newId, err := mysql.Insert(bo)
+	newId, err := dao.Insert(bo)
 	if err != nil {
 		return
 	}
@@ -53,7 +53,7 @@ func UpdateUser(context *gin.Context) {
 		log.Print("json error:\n", err)
 		return
 	}
-	mysql.Update(bo)
+	dao.Update(bo)
 	context.JSON(http.StatusOK, gin.H{
 		"message": "success",
 		"newBo":   bo,
@@ -63,7 +63,7 @@ func UpdateUser(context *gin.Context) {
 func DelUser(context *gin.Context) {
 	idStr := context.Param("id")
 	id, _ := strconv.Atoi(idStr)
-	err := mysql.Del(id)
+	err := dao.Del(id)
 	if err != nil {
 		log.Print("del fail")
 		return

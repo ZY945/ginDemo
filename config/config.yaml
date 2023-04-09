@@ -1,7 +1,7 @@
 app:
-  name: "ginweb"
-  mode: "dev"
-  port: 8085
+  Name: "ginweb"
+  RunMode: "dev"
+  Port: 8080
 
 log:
   director: "log"
@@ -21,7 +21,7 @@ log:
 mysql:
   host: "127.0.0.1"
   port: 3306
-  user: "root"
+  userName: "root"
   password: "root"
   dbname: "other"
   max_open_conns: 200
@@ -30,7 +30,7 @@ mysql:
 redis:
   host: "127.0.0.1"
   port: 6379
-  password: ""
+  password: "moyu"
   pool_size: 100
   db: 0
 

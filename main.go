@@ -1,26 +1,39 @@
 package main
 
 import (
-	"GinAndSqlx/dao/mysql"
+	"GinAndSqlx/global"
 	"GinAndSqlx/routers"
-	"GinAndSqlx/setting"
 	"fmt"
 )
 
 func main() {
 	//1.加载配置
-	if err := setting.Init(); err != nil {
+	if err := global.SetupSetting(); err != nil {
 		fmt.Printf("init setting failed, err:%v\n", err)
 		return
 	}
-	//3.初始化mysql
-	if err := mysql.SqlxInitMySQL(); err != nil {
+	//2.初始化mysql
+	if err := global.MySQLInit(); err != nil {
 
 		fmt.Printf("init mysql failed, err:%v\n", err)
 		return
 	}
-	defer mysql.Close()
+	defer global.MysqlClose()
 
+	//2.初始化redis
+	if err := global.RedisInit(); err != nil {
+
+		fmt.Printf("init redis failed, err:%v\n", err)
+		return
+	}
+	defer global.RedisClose()
+
+	//雪花算法
+	if err := global.SnowFlakeInit(); err != nil {
+		fmt.Printf("init snowflake failed, err:%v\n", err)
+		return
+	}
 	router := routers.InitRouter()
+
 	router.Run(":8080")
 }

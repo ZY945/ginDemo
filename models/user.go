@@ -1,6 +1,8 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 //type User struct {
 //	Id         int    `db:"id"`
@@ -33,12 +35,12 @@ type UserVo struct {
 }
 
 type AddUserBo struct {
-	Name       string
-	Age        int64
-	Sex        string
-	Address    string
-	Phone      string
-	CreateTime string
+	Name    string
+	Age     int64
+	Sex     string
+	Address string
+	Phone   string
+	//CreateTime time.Time `default:"3"` //为0时
 }
 
 type UpdateUserBo struct {

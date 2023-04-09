@@ -1,7 +1,10 @@
 package routers
 
-import "github.com/gin-gonic/gin"
-import "GinAndSqlx/controllers"
+import (
+	"GinAndSqlx/controllers"
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
 
 // 自定义中间件
 func MyHandle() gin.HandlerFunc {
@@ -24,5 +27,10 @@ func InitRouter() *gin.Engine {
 		userEngine.DELETE(":id", controllers.DelUser)
 	}
 
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"msg": "404",
+		})
+	})
 	return router
 }

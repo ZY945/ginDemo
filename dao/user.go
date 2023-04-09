@@ -1,10 +1,12 @@
-package mysql
+package dao
 
 import (
+	"GinAndSqlx/global"
 	"GinAndSqlx/models"
 	_ "GinAndSqlx/models"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"time"
 )
 
 func getVosByUser(users []*models.User) (userVos []*models.UserVo) {
@@ -44,7 +46,7 @@ func SqlxqueryByGet(id int) (vo *models.UserVo) {
 	//var u *User = &User{}
 	u := new(models.User)
 	vo = new(models.UserVo)
-	err := db.Get(u, sqlStr, id)
+	err := global.DB.Get(u, sqlStr, id)
 	if err != nil {
 		fmt.Printf("get data failed, err:%v\n", err)
 		return
@@ -56,7 +58,7 @@ func SqlxqueryByGet(id int) (vo *models.UserVo) {
 func SqlxList() (users []*models.User, userVos []*models.UserVo, err error) {
 
 	query := "select * from user"
-	err = db.Select(&users, query)
+	err = global.DB.Select(&users, query)
 	if err != nil {
 		fmt.Printf("error:", err)
 	}
@@ -65,13 +67,12 @@ func SqlxList() (users []*models.User, userVos []*models.UserVo, err error) {
 	return
 }
 
-// in查询
-// 查询id在给定id集合中的数据。
+// GetInIds 查询id在给定id集合中的数据。
 func GetInIds(ids []int) (users []models.User, err error) {
 
 	query, args, err := sqlx.In("select id, name, age from user where age in (?)", ids)
-	query = db.Rebind(query)
-	err = db.Select(&users, query, args...)
+	query = global.DB.Rebind(query)
+	err = global.DB.Select(&users, query, args...)
 
 	return
 }
@@ -80,7 +81,7 @@ func GetInIds(ids []int) (users []models.User, err error) {
 func Del(id int) (err error) {
 
 	sqlStr := "delete from user where id = ?"
-	result, err := db.Exec(sqlStr, id)
+	result, err := global.DB.Exec(sqlStr, id)
 	if err != nil {
 		fmt.Println("Del failed, err:%v\n", err)
 		return
@@ -95,13 +96,13 @@ func Del(id int) (err error) {
 	return
 }
 
-// 新增--Exec
+// Insert 新增--Exec
 func Insert(bo *models.AddUserBo) (insertId int64, err error) {
 
 	sqlStr := "insert user(name, age, sex, address, phone, create_time) VALUE (?,?,?,?,?,?)"
 
 	//QueryRowx方法可以查询,需要注意scan后的参数应与查询返回的数量一致,且一一对应
-	result, err := db.Exec(sqlStr, bo.Name, bo.Age, bo.Sex, bo.Address, bo.Phone, bo.CreateTime)
+	result, err := global.DB.Exec(sqlStr, bo.Name, bo.Age, bo.Sex, bo.Address, bo.Phone, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
 		fmt.Printf("insert failed, err:%v\n", err)
 		return
@@ -121,11 +122,11 @@ func Insert(bo *models.AddUserBo) (insertId int64, err error) {
 	return
 }
 
-// 修改
+// Update 修改
 func Update(bo *models.UpdateUserBo) {
 
 	sqlStr := "update user set age=?,address=?,phone=? where id = ?"
-	exec, err := db.Exec(sqlStr, bo.Age, bo.Address, bo.Phone, bo.Id)
+	exec, err := global.DB.Exec(sqlStr, bo.Age, bo.Address, bo.Phone, bo.Id)
 	if err != nil {
 		fmt.Printf("update failed, err:%v\n", err)
 		return

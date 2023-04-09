@@ -5,6 +5,7 @@ import (
 	"GinAndSqlx/models"
 	"GinAndSqlx/models/gorm"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"time"
 )
@@ -105,7 +106,7 @@ func Insert(bo *models.AddUserBo) (insertId int64, err error) {
 	//QueryRowx方法可以查询,需要注意scan后的参数应与查询返回的数量一致,且一一对应
 	result, err := global.DB.Exec(sqlStr, bo.UserName, bo.PassWord, bo.Name, bo.Age, bo.Sex, bo.Address, bo.Phone, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
-		fmt.Printf("insert failed, err:%v\n", err)
+		fmt.Printf("insert failed！\nerr:", err)
 		return
 	}
 	row_affect, err := result.RowsAffected()
@@ -116,7 +117,7 @@ func Insert(bo *models.AddUserBo) (insertId int64, err error) {
 	}
 	insertId, err = result.LastInsertId()
 	if err != nil {
-		fmt.Println("get lastinsert ID failed, err:%v\n", err)
+		fmt.Println("get lastinsert ID failed\nerr:", err)
 		return
 	}
 	fmt.Printf("insert success, the id is %d.\n", insertId)
@@ -153,6 +154,17 @@ func Login(bo *models.LoginUserBo) {
 	}
 	if total == 0 {
 		fmt.Printf("No found the user")
+		return
+	}
+	return
+}
+
+// SetAndGetToken Login (redis)
+func SetAndGetToken(context *gin.Context, key string, expiration time.Duration) (token string) {
+	token = "xxx"
+	err := global.RedisDb.Set(context, "gorediskey", "goredisvalue", 60*time.Second).Err()
+	if err != nil {
+		fmt.Printf("redis set fail!\nerr:", err)
 		return
 	}
 	return

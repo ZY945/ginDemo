@@ -88,6 +88,7 @@ func Login(context *gin.Context) {
 		return
 	}
 	dao.Login(bo)
+	dao.SetAndGetToken(context, bo.UserName, 3)
 	if err != nil {
 		log.Print("login fail")
 		return

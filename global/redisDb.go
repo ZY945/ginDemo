@@ -1,16 +1,16 @@
 package global
 
 import (
+	"context"
 	"fmt"
-
+	"github.com/go-redis/redis/v8" // 注意导入的是新版本,如果爆红,把包删除即可,重新import
 	"github.com/spf13/viper"
-
-	"github.com/go-redis/redis"
 )
 
 // 声明一个全局变量
 var (
 	RedisDb *redis.Client
+	ctx     = context.Background()
 )
 
 // RedisInit Init 初始化连接
@@ -21,10 +21,12 @@ func RedisInit() (err error) {
 		DB:       viper.GetInt("redis.db"), // use default DB
 		PoolSize: viper.GetInt("redis.pool_size"),
 	})
-
-	_, err = RedisDb.Ping().Result()
-
-	return err
+	err = RedisDb.Ping(ctx).Err()
+	if err != nil {
+		fmt.Println("ping redis fail!\n", err)
+		return err
+	}
+	return
 }
 
 func RedisClose() {

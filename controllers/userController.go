@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"GinAndSqlx/dao"
-	"GinAndSqlx/models"
+	"GinDemo/cache"
+	"GinDemo/dao"
+	"GinDemo/models"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -88,7 +89,8 @@ func Login(context *gin.Context) {
 		return
 	}
 	dao.Login(bo)
-	dao.SetAndGetToken(context, bo.UserName, 3)
+	//cache.SetAndGetToken(context, bo.UserName, 3)
+	cache.UserRank(context, bo)
 	if err != nil {
 		log.Print("login fail")
 		return

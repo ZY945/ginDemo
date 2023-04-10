@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GinAndSqlx/global"
-	"GinAndSqlx/routers"
+	"GinDemo/global"
+	"GinDemo/routers"
 	"fmt"
 )
 

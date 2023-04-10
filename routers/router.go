@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"GinAndSqlx/controllers"
+	"GinDemo/controllers"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -17,7 +17,7 @@ func MyHandle() gin.HandlerFunc {
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	router.Use(MyHandle())
+	//router.Use(MyHandle())
 	userEngine := router.Group("/user")
 	{
 		userEngine.GET("", controllers.GetUserVoById)
@@ -26,6 +26,13 @@ func InitRouter() *gin.Engine {
 		userEngine.PUT("", controllers.UpdateUser)
 		userEngine.DELETE(":id", controllers.DelUser)
 		userEngine.GET("login", controllers.Login)
+	}
+	favoritesEngine := router.Group("/favorites")
+	{
+		favoritesEngine.GET(":id", controllers.GetFavoritesById)
+		favoritesEngine.GET("/list", controllers.GetFavoritesList)
+		favoritesEngine.POST("", controllers.AddFavorites)
+		favoritesEngine.DELETE(":id", controllers.DelFavorites)
 	}
 
 	router.NoRoute(func(c *gin.Context) {

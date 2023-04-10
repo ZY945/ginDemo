@@ -1,11 +1,10 @@
 package dao
 
 import (
-	"GinAndSqlx/global"
-	"GinAndSqlx/models"
-	"GinAndSqlx/models/gorm"
+	"GinDemo/global"
+	"GinDemo/models"
+	"GinDemo/models/gorm"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"time"
 )
@@ -154,17 +153,6 @@ func Login(bo *models.LoginUserBo) {
 	}
 	if total == 0 {
 		fmt.Printf("No found the user")
-		return
-	}
-	return
-}
-
-// SetAndGetToken Login (redis)
-func SetAndGetToken(context *gin.Context, key string, expiration time.Duration) (token string) {
-	token = "xxx"
-	err := global.RedisDb.Set(context, "gorediskey", "goredisvalue", 60*time.Second).Err()
-	if err != nil {
-		fmt.Printf("redis set fail!\nerr:", err)
 		return
 	}
 	return

@@ -1,0 +1,12 @@
+//字符串转换
+str = strconv.Itoa(p.Id) //int -> string
+p.Id = strconv.Atoi(str) //string -> int
+
+
+//序列化
+content,err := json.Marshal(article)
+
+
+
+//根据数据库生成model类
+https://github.com/gohouse/converter

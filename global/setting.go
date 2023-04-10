@@ -1,7 +1,7 @@
 package global
 
 import (
-	"GinAndSqlx/pkg/setting"
+	"GinDemo/pkg/setting"
 	"time"
 )
 
@@ -31,8 +31,8 @@ type DatabaseSettingS struct {
 	DBName       string
 	Charset      string
 	ParseTime    bool
-	MaxOpenConns int
-	MaxIdleConns int
+	MaxOpenConns int `mapstructure:"max_open_conns"`
+	MaxIdleConns int `mapstructure:"max_idle_conns"`
 }
 
 // redis配置

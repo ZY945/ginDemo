@@ -11,8 +11,10 @@ import (
 	"time"
 )
 
-var DB *sqlx.DB
-var GormDB *gorm.DB
+var (
+	DB     *sqlx.DB
+	GormDB *gorm.DB
+)
 
 // MySQLInit 初始化数据库
 func MySQLInit() (err error) {
@@ -51,8 +53,8 @@ func GormInit() (err error) {
 		return
 	}
 	sqlDB, _ := GormDB.DB()
-	DB.SetMaxOpenConns(DatabaseSetting.MaxOpenConns)
-	DB.SetMaxIdleConns(DatabaseSetting.MaxIdleConns)
+	sqlDB.SetMaxOpenConns(DatabaseSetting.MaxOpenConns)
+	sqlDB.SetMaxIdleConns(DatabaseSetting.MaxIdleConns)
 	sqlDB.SetConnMaxLifetime(10 * time.Second)
 
 	return

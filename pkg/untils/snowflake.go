@@ -1,7 +1,7 @@
 package untils
 
 import (
-	"GinAndSqlx/global"
+	"GinDemo/global"
 )
 
 func GenID() int64 {
